@@ -54,6 +54,7 @@ As a consequence, be careful not to push any c file containing a main function i
 Our main files will include your main header file (main.h): #include main.h
 You might want to look at the gcc flag -Wno-format when testing with your _printf and the standard printf. Example of test file that you could use:
 alex@ubuntu:~/c/printf$ cat main.c 
+
 #include <limits.h>
 #include <stdio.h>
 #include "main.h"
@@ -98,33 +99,8 @@ int main(void)
     printf("Unknown:[%r]\n");
     return (0);
 }
-alex@ubuntu:~/c/printf$ gcc -Wall -Wextra -Werror -pedantic -std=gnu89 -Wno-format *.c
-alex@ubuntu:~/c/printf$ ./printf
-Let's try to printf a simple sentence.
-Let's try to printf a simple sentence.
-Length:[39, 39]
-Length:[39, 39]
-Negative:[-762534]
-Negative:[-762534]
-Unsigned:[2147484671]
-Unsigned:[2147484671]
-Unsigned octal:[20000001777]
-Unsigned octal:[20000001777]
-Unsigned hexadecimal:[800003ff, 800003FF]
-Unsigned hexadecimal:[800003ff, 800003FF]
-Character:[H]
-Character:[H]
-String:[I am a string !]
-String:[I am a string !]
-Address:[0x7ffe637541f0]
-Address:[0x7ffe637541f0]
-Percent:[%]
-Percent:[%]
-Len:[12]
-Len:[12]
-Unknown:[%r]
-Unknown:[%r]
-alex@ubuntu:~/c/printf$
+Compile using: gcc -Wall -Wextra -Werror -pedantic -std=gnu89 -Wno-format *.c
+
 We strongly encourage you to work all together on a set of tests
 If the task does not specify what to do with an edge case, do the same as printf
 
@@ -145,9 +121,7 @@ You don’t have to handle the flag characters
 You don’t have to handle field width
 You don’t have to handle precision
 You don’t have to handle the length modifiers
-Repo:
 
-GitHub repository: printf
   
 1. Education is when you read the fine print. Experience is what you get if you don't
 mandatory
@@ -159,9 +133,6 @@ You don’t have to handle the flag characters
 You don’t have to handle field width
 You don’t have to handle precision
 You don’t have to handle the length modifiers
-Repo:
-
-GitHub repository: printf
   
 2. With a face like mine, I do better in print
 #advanced
@@ -181,9 +152,6 @@ You don’t have to handle the flag characters
 You don’t have to handle field width
 You don’t have to handle precision
 You don’t have to handle the length modifiers
-Repo:
-
-GitHub repository: printf
   
 4. Nothing in fine print is ever good news
 #advanced
@@ -212,11 +180,6 @@ int main(void)
     _printf("%S\n", "Best\nSchool");
     return (0);
 }
-alex@ubuntu:~/c/printf$ gcc -Wall -Wextra -Werror -pedantic -std=gnu89 main.c
-alex@ubuntu:~/c/printf$ ./a.out
-Best\x0ASchool
-alex@ubuntu:~/c/printf$
-Repo:
 
 GitHub repository: printf
  
