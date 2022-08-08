@@ -1,86 +1,82 @@
-#include <stdarg.h>
 #include "main.h"
-#include <stddef.h>
+#include <stdlib.h>
 
 /**
- * get_op - select function for conversion char
- * @c: char to check
- * Return: pointer to function
+ * check_for_specifiers - checks if there is a valid format specifier
+ * @format: possible format specifier
+ *
+ * Return: pointer to valid function or NULL
  */
-
-int (*get_op(const char c))(va_list)
+static int (*check_for_specifiers(const char *format))(va_list)
 {
-	int a = 0;
-
-	flags_p fp[] = {
-		{"c", print_char},
-		{"s", print_str},
-		{"i", print_int},
-		{"d", print_decimal},
-		{"b", print_binary},
-		{"o", print_octal},
-		{"x", print_hexa_lower},
-		{"X", print_hexa_upper},
-		{"u", print_unsigned},
-		{"S", print_str_unprintable},
-		{"r", print_str_reverse},
-		{"p", print_ptr},
-		{"R", print_rot13},
-		{"%", print_percent}
+	unsigned int i;
+	print_t p[] = {
+		{"c", print_c},
+		{"s", print_s},
+		{"i", print_i},
+		{"d", print_d},
+		{"u", print_u},
+		{"b", print_b},
+		{"o", print_o},
+		{"x", print_x},
+		{"X", print_X},
+		{"p", print_p},
+		{"S", print_S},
+		{"r", print_r},
+		{"R", print_R},
+		{NULL, NULL}
 	};
-	while (a < 14)
+
+	for (i = 0; p[i].t != NULL; i++)
 	{
-		if (c == fp[a].c[0])
+		if (*(p[i].t) == *format)
 		{
-			return (fp[a].f);
+			break;
 		}
-		a++;
 	}
-	return (NULL);
+	return (p[i].f);
 }
 
 /**
- * _printf - Reproduce behavior of printf function
- * @format: format string
- * Return: value of printed chars
+ * _printf - prints anything
+ * @format: list of argument types passed to the function
+ *
+ * Return: number of characters printed
  */
-
 int _printf(const char *format, ...)
 {
-	va_list ap;
-	int add = 0, a = 0;
-	int (*func)();
+	unsigned int i = 0, count = 0;
+	va_list valist;
+	int (*f)(va_list);
 
-	if (!format || (format[0] == '%' && format[1] == '\0'))
+	if (format == NULL)
 		return (-1);
-	va_start(ap, format);
-
-	while (format[a])
+	va_start(valist, format);
+	while (format[i])
 	{
-		if (format[a] == '%')
+		for (; format[i] != '%' && format[i]; i++)
 		{
-			if (format[a + 1] != '\0')
-				func = get_op(format[a + 1]);
-			if (func == NULL)
-			{
-				_putchar(format[a]);
-				add++;
-				a++;
-			}
-			else
-			{
-				add += func(ap);
-				a += 2;
-				continue;
-			}
+			_putchar(format[i]);
+			count++;
 		}
+		if (!format[i])
+			return (count);
+		f = check_for_specifiers(&format[i + 1]);
+		if (f != NULL)
+		{
+			count += f(valist);
+			i += 2;
+			continue;
+		}
+		if (!format[i + 1])
+			return (-1);
+		_putchar(format[i]);
+		count++;
+		if (format[i + 1] == '%')
+			i += 2;
 		else
-		{
-			_putchar(format[a]);
-			add++;
-			a++;
-		}
+			i++;
 	}
-	va_end(ap);
-	return (add);
+	va_end(valist);
+	return (count);
 }
